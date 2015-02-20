@@ -351,6 +351,7 @@ Swarm.prototype._onwire = function(connection, wire) {
 	});
 
 	var cleanup = once(function() {
+		self.emit('wire-disconnect', wire, connection);
 		self.wires.splice(self.wires.indexOf(wire), 1);
 		connection.destroy();
 	});
