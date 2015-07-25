@@ -148,6 +148,8 @@ var Swarm = function(infoHash, peerId, options) {
 	this.connections = [];
 	this.wires = [];
 	this.paused = false;
+	
+	this.tries = 0;
 
 	this.uploaded = 0;
 	this.downloaded = 0;
@@ -257,6 +259,8 @@ Swarm.prototype._drain = function() {
 
 	var peer = this._peers[addr];
 	if (!peer) return;
+	
+	self.tries++;
 
 	var repush = function() {
 		peer.node = self._queues[peer.priority].push(addr);
