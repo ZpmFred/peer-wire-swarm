@@ -173,10 +173,12 @@ Swarm.prototype.__defineGetter__('queued', function() {
 
 Swarm.prototype.pause = function() {
 	this.paused = true;
+	this.emit("pause");
 };
 
 Swarm.prototype.resume = function() {
 	this.paused = false;
+	this.emit("resume");
 	this._drain();
 };
 
