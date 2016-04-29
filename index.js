@@ -239,6 +239,7 @@ Swarm.prototype.destroy = function() {
 
 	this.wires.forEach(function (wire) {
 		wire.destroy();
+		wire.removeAllListeners();
 	});
 
 	leave(this.port, this);
