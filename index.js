@@ -245,6 +245,7 @@ Swarm.prototype.destroy = function() {
 	leave(this.port, this);
 	process.nextTick(function() {
 		self.emit('close');
+		self.removeAllListeners(); // after the last close has been handled, it makes sense to removeAllListeners to avoid leaks
 	});
 };
 
