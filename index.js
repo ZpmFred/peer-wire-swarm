@@ -360,8 +360,6 @@ Swarm.prototype._onwire = function(connection, wire) {
 		self.emit('wire-disconnect', wire, connection);
 		self.wires.splice(self.wires.indexOf(wire), 1);
 		connection.destroy();
-		wire.removeAllListeners();
-		connection.removeAllListeners();
 	});
 
 	connection.on('close', cleanup);
