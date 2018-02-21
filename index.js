@@ -1,4 +1,4 @@
-var utp = require('utp');
+var utp = require('utp-punch');
 var net = require('net');
 var fifo = require('fifo');
 var once = require('once');
@@ -91,7 +91,7 @@ var join = function(port, swarm) {
 		}
 
 		servers.push(net.createServer(onconnection));
-		if (swarm.utp) servers.push(utp.createServer(onconnection));
+		if (swarm.utp) servers.push(new utp({}, onconnection));
 
 		var loop = function(i) {
 			if (i < servers.length) return servers[i].listen(port, loop.bind(null, i+1))
@@ -279,7 +279,7 @@ Swarm.prototype._drain = function() {
 	var connection;
 
 	if(this.utp && !peer.noUtp) {
-		connection = utp.connect(parts[1], parts[0]);
+		connection = (new utp()).connect(parts[1], parts[0]);
 		connection.on('timeout', function() {
 			// Unable to connect to peer with uTP
 			// Assume it doesn't support it.
