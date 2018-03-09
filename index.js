@@ -1,4 +1,4 @@
-var utp = require('utp-punch');
+var utp = require('utp-native');
 var net = require('net');
 var fifo = require('fifo');
 var once = require('once');
@@ -91,7 +91,7 @@ var join = function(port, swarm) {
 		}
 
 		servers.push(net.createServer(onconnection));
-		if (swarm.utp) servers.push(new utp({}, onconnection));
+		if (swarm.utp) servers.push(utp.createServer(onconnection));
 
 		var loop = function(i) {
 			if (i < servers.length) return servers[i].listen(port, loop.bind(null, i+1))
@@ -323,7 +323,12 @@ Swarm.prototype._shift = function() {
 };
 
 Swarm.prototype._onincoming = function(connection, wire) {
-	wire.peerAddress = connection.address().address + ':' + connection.address().port;
+	if (typeof(connection.remoteAddress) == 'function') {
+		wire.peerAddress = connection.remoteAddress().address + ':' + connection.remoteAddress().port;
+	}
+	else {
+		wire.peerAddress = connection.address().address + ':' + connection.address().port;
+	}
 	wire.handshake(this.infoHash, this.peerId, this.handshake);
 
 	this._onconnection(connection);
